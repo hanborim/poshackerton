@@ -1,0 +1,51 @@
+/* === Brand Color Tokens === */
+:root{
+  /* Core */
+  --color-primary:   #0F2232;   /* Deep Navy */
+  --color-secondary: #FF6A13;   /* Safety Orange */
+  --color-tertiary:  #3B5360;   /* Slate Blue-Gray */
+  --color-white:     #F7F8FA;   /* Helmet White */
+
+  /* Neutrals / Surfaces */
+  --color-surface: #FFFFFF;
+  --color-border:  #C8CDD3;     /* Concrete Gray */
+  --color-oak:     #E7D9C7;     /* Light Oak accent */
+
+  /* Semantics */
+  --color-success: #7ED957;     /* Complete/OK */
+  --color-info:    #3B5360;
+  --color-warning: #FF6A13;
+  --color-danger:  #D64545;
+
+  /* Text */
+  --text-strong: #0F2232;
+  --text-body:   #2A3036;
+  --text-muted:  #66707A;
+  --text-inverse:#FFFFFF;
+
+  /* Background */
+  --bg-default: var(--color-white);
+}
+
+/* === Utility Classes (선택 사용) === */
+.bg-primary   { background-color: var(--color-primary); }
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-tertiary  { background-color: var(--color-tertiary); }
+.bg-white     { background-color: var(--color-white); }
+.bg-surface   { background-color: var(--color-surface); }
+
+.text-primary   { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-tertiary  { color: var(--color-tertiary); }
+.text-muted     { color: var(--text-muted); }
+.text-inverse   { color: var(--text-inverse); }
+
+.border-primary   { border-color: var(--color-primary); }
+.border-secondary { border-color: var(--color-secondary); }
+.border-tertiary  { border-color: var(--color-tertiary); }
+.border-default   { border-color: var(--color-border); }
+
+/* 상태 뱃지용 */
+.badge-reported { background: var(--color-warning); color: var(--text-inverse); }
+.badge-checking { background: var(--color-tertiary); color: var(--text-inverse); }
+.badge-done     { background: var(--color-success); color: var(--color-primary); }

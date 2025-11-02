@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>포스체크고 · 하자 접수 (이미지 업로드 + 자동 키워드)</title>
+  <style>
+    /* -------------------------------------------------
+      POSCHECKO – Defect Submit UI (Resident)
+      Color concept from user's spec
+      1) Deep Navy   #0F2232  (신뢰/안정, Primary)
+      2) Safety Orange #FF6A13 (즉각성/CTA/경고)
+      3) Slate Blue-Gray #3B5360 (보조/데이터/중립)
+      4) Helmet White #F7F8FA (배경/가독)
+    -------------------------------------------------- */
+    :root{
+      --deep-navy:    #0F2232;
+      --navy-700:     #193347; /* hover depth */
+      --safety-orange:#FF6A13;
+      --slate-blue:   #3B5360;
+      --helmet-white: #F7F8FA;
+      --ink:          #0B1117;
+      --muted:        #6B7D87;
+      --border:       #E2E8F0;
+      --radius-xl:    16px;
+      --radius-lg:    12px;
+      --shadow-lg:    0 22px 44px rgba(15,34,50,.16);
+      --shadow-md:    0 12px 24px rgba(15,34,50,.12);
+    }
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{ margin:0; font-family:"Pretendard Variable", Pretendard, -apple-system, system-ui, Segoe UI, Roboto, "Noto Sans KR", Helvetica, Arial, sans-serif; background:var(--helmet-white); color:var(--ink) }
+
+    /* Shell */
+    .wrap{ min-height:100vh; display:grid; grid-template-columns: 1.1fr 1fr }
+    .brand{ position:relative; padding:36px; color:#fff; background: linear-gradient(140deg, var(--deep-navy) 0%, #1a3550 45%, var(--slate-blue) 100%) }
+    .brand::before{ content:""; position:absolute; inset:0; opacity:.12; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' fill='%230F2232'/%3E%3Cpath d='M0 22h44M22 0v44' stroke='%23FFFFFF' stroke-opacity='.35'/%3E%3C/svg%3E"); background-size:44px 44px; pointer-events:none }
+    .brand > *{ position:relative; z-index:1 }
+
+    .panel{ padding:28px; display:grid; gap:12px }
+
+    .card{ background:#fff; border:1px solid var(--border); border-radius:var(--radius-xl); box-shadow:var(--shadow-lg); padding:18px }
+
+    .title{ margin:0 0 4px; color:#fff; font-size:24px; font-weight:800 }
+    .subtitle{ margin:0; color:#cbd5e1 }
+
+    /* Uploader */
+    .uploader{ display:grid; gap:10px }
+    .drop{ position:relative; border:2px dashed #d0d8e3; border-radius:var(--radius-xl); background:#fff; overflow:hidden }
+    .drop input{ position:absolute; inset:0; opacity:0; cursor:pointer }
+    .drop .placeholder{ display:grid; place-items:center; padding:18px; color:var(--slate-blue); font-weight:700; background:linear-gradient(0deg, rgba(15,34,50,.02), rgba(15,34,50,.02)) }
+    .preview{ display:none; width:100%; background:#000 }
+    .preview img{ display:block; width:100%; height:360px; object-fit:cover }
+    .meta{ display:flex; justify-content:space-between; gap:10px; padding:10px 6px 0; color:var(--muted); font-size:12px }
+
+    /* Sections */
+    .section{ margin-top:12px }
+    .section h3{ margin:0 0 8px; color:var(--slate-blue); font-size:16px }
+
+    /* Chips */
+    .chips{ display:flex; flex-wrap:wrap; gap:8px }
+    .chip{ display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 12px; border-radius:999px; border:1px solid var(--border); background:#fff; color:var(--slate-blue); font-weight:700; cursor:pointer; transition:transform .05s, box-shadow .2s }
+    .chip:hover{ box-shadow:0 6px 14px rgba(15,34,50,.08) }
+    .chip .ico{ display:inline-grid; place-items:center }
+    .chip.selected{ background:rgba(15,34,50,.08); border-color:#cfd7e1; color:var(--deep-navy) }
+
+    .chip.cta{ background: var(--safety-orange); color:#fff; border-color: transparent }
+
+    /* Input for custom keyword */
+    .addbar{ display:grid; grid-template-columns: 1fr 44px; gap:8px; margin-top:8px }
+    .input{ height:44px; border:1px solid var(--border); border-radius:var(--radius-lg); padding:0 12px; outline:none }
+    .input:focus{ border-color:var(--slate-blue); box-shadow:0 0 0 4px rgba(59,83,96,.18) }
+    .btn{ display:inline-grid; place-items:center; height:44px; border-radius:var(--radius-lg); border:0; background: linear-gradient(180deg, var(--deep-navy), var(--navy-700)); color:#fff; cursor:pointer; box-shadow:0 10px 22px rgba(15,34,50,.28) }
+    .btn:active{ transform:translateY(1px) }
+
+    .footer-actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px }
+    .btn-ghost{ background:#fff; color:var(--slate-blue); border:1px solid var(--border); box-shadow:none }
+    .btn-orange{ background: linear-gradient(180deg, #ff7f3c, var(--safety-orange)); box-shadow:0 10px 22px rgba(255,106,19,.28) }
+
+    @media (max-width: 980px){ .wrap{ grid-template-columns:1fr } .brand{ padding:24px } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Left: camera/upload + tagging -->
+    <section class="brand" aria-label="포스체크고 소개">
+      <h1 class="title">하자 접수 – 이미지 업로드</h1>
+      <p class="subtitle">사진을 올리면 AI가 자동으로 키워드를 추천해요. 필요하면 수동으로 추가/삭제하세요.</p>
+
+      <div class="panel">
+        <div class="card uploader">
+          <div class="drop" id="drop">
+            <input id="file" type="file" accept="image/*" />
+            <div class="placeholder">
+              <div>
+                <div style="display:flex; align-items:center; gap:10px; justify-content:center;">
+                  <!-- camera icon -->
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4 7h3l2-2h6l2 2h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="1.6"/></svg>
+                  <span>이미지를 끌어놓거나 클릭하여 업로드</span>
+                </div>
+              </div>
+            </div>
+            <div class="preview" id="preview"><img id="img" alt="미리보기"/></div>
+          </div>
+          <div class="meta"><span id="shotTime">사진 미선택</span><span id="fileName"></span></div>
+        </div>
+
+        <!-- Selected keywords -->
+        <div class="card section">
+          <h3>선택됨</h3>
+          <div class="chips" id="selected"></div>
+        </div>
+
+        <!-- Recommended keywords -->
+        <div class="card section">
+          <h3>추천 키워드</h3>
+          <div class="chips" id="recommended"></div>
+
+          <div class="addbar">
+            <input id="custom" class="input" placeholder="키워드를 입력하세요 (예: LED 불량)" />
+            <button class="btn" id="addBtn" title="키워드 추가">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+
+          <div class="footer-actions">
+            <button class="btn btn-ghost" id="resetBtn">초기화</button>
+            <button class="btn btn-orange" id="nextBtn">다음 단계</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: guidance copy -->
+    <section class="panel" aria-label="촬영 가이드">
+      <div class="card">
+        <h3 style="margin:0 0 8px; color:var(--slate-blue)">촬영 가이드</h3>
+        <ul style="margin:0; padding-left:18px; color:var(--muted); line-height:1.6">
+          <li>밝은 곳에서 <b>수직으로</b> 촬영하세요.</li>
+          <li>하자 부위를 가운데에 두고 <b>흔들림 없이</b> 촬영하세요.</li>
+          <li>전체 샷 1장 + 클로즈업 1장을 권장합니다.</li>
+        </ul>
+        <div style="margin-top:10px; font-size:12px; color:var(--muted)">AI가 부적합 사진(역광/과노출)을 감지하면 재촬영을 안내합니다.</div>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 8px; color:var(--slate-blue)">상태 안내</h3>
+        <div class="chips">
+          <span class="chip">
+            <span class="ico" aria-hidden="true">
+              <!-- search icon -->
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </span>
+            자동 분류 중…
+          </span>
+          <span class="chip cta" title="중요 알림">
+            <span class="ico" aria-hidden="true">
+              <!-- alert icon -->
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v5" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.5" r="1" fill="#fff"/><path d="M12 3 2 21h20L12 3Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+            </span>
+            주의 필요
+          </span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Demo auto tags when image selected
+    const file = document.getElementById('file');
+    const previewWrap = document.getElementById('preview');
+    const img = document.getElementById('img');
+    const fileName = document.getElementById('fileName');
+    const shotTime = document.getElementById('shotTime');
+
+    const selected = document.getElementById('selected');
+    const recommended = document.getElementById('recommended');
+    const custom = document.getElementById('custom');
+
+    const baseRecommended = [
+      { k: '조명등기구불량', type: 'search' },
+      { k: '밝기불균형', type: 'alert' },
+      { k: '등기구미점등', type: 'search' },
+      { k: '등기구깜박임', type: 'search' },
+      { k: '전기설비점검필요', type: 'alert' }
+    ];
+
+    const iconFor = (type, selected=false) => {
+      if(type === 'alert'){
+        return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v5" stroke="${selected? '#fff' : 'currentColor'}" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.5" r="1" fill="${selected? '#fff' : 'currentColor'}"/><path d="M12 3 2 21h20L12 3Z" stroke="${selected? '#fff' : 'currentColor'}" stroke-width="2" stroke-linejoin="round"/></svg>`;
+      }
+      return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+    };
+
+    function Chip({label, kind='search', isCTA=false, selected=false}){
+      const span = document.createElement('span');
+      span.className = `chip${isCTA? ' cta':''}${selected? ' selected':''}`;
+      span.innerHTML = `<span class="ico" aria-hidden="true">${iconFor(kind, isCTA)}</span>${label}`;
+      span.addEventListener('click',()=>{
+        if(span.parentElement === recommended){ moveChip(span, selectedContainer=true); }
+        else{ span.remove(); }
+      });
+      return span;
+    }
+
+    function moveChip(span, selectedContainer){
+      const clone = span.cloneNode(true);
+      clone.classList.remove('cta');
+      clone.classList.add('selected');
+      clone.addEventListener('click', ()=> clone.remove());
+      selected.appendChild(clone);
+    }
+
+    function hydrateRecommended(){
+      recommended.innerHTML = '';
+      baseRecommended.forEach((it,i)=>{
+        const isCTA = it.type==='alert' && (i<2); // 상위 두 개 강조 예시
+        const chip = Chip({label:'#'+it.k, kind:it.type, isCTA});
+        recommended.appendChild(chip);
+      });
+    }
+
+    hydrateRecommended();
+
+    // File preview
+    file.addEventListener('change', (e)=>{
+      const f = e.target.files?.[0]; if(!f) return;
+      const r = new FileReader();
+      r.onload = ()=>{ img.src = r.result; previewWrap.style.display='block'; };
+      r.readAsDataURL(f);
+      fileName.textContent = f.name;
+      shotTime.textContent = '업로드: ' + new Date().toLocaleString();
+      // When image provided, auto-pick top two recommendations as selected
+      selected.innerHTML = '';
+      ['#조명등기구불량','#밝기불균형'].forEach((k,idx)=>{
+        const sp = Chip({label:k, kind: idx? 'alert':'search', selected:true});
+        sp.classList.add('selected');
+        selected.appendChild(sp);
+      });
+    });
+
+    // Add custom keyword
+    document.getElementById('addBtn').addEventListener('click',()=>{
+      const v = custom.value.trim(); if(!v) return; const chip = Chip({label:'#'+v, kind:'search'}); selected.appendChild(chip); custom.value=''; custom.focus();
+    });
+
+    // Reset
+    document.getElementById('resetBtn').addEventListener('click',()=>{
+      selected.innerHTML=''; custom.value='';
+    });
+
+    // Next
+    document.getElementById('nextBtn').addEventListener('click',()=>{
+      alert('선택된 키워드와 이미지를 다음 단계(세부 정보/주소/연락처)로 전달합니다.');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>포스체크고 · POSCHECKO – 로그인</title>
+  <style>
+    /* -----------------------------------------------
+      POSCHECKO – Brand Tokens (사용자 지정 팔레트)
+      1) Deep Navy        #0F2232  (신뢰/안정/전문성)
+      2) Safety Orange    #FF6A13  (즉각성/CTA)
+      3) Slate Blue-Gray  #3B5360  (중립/데이터)
+      4) Helmet White     #F7F8FA  (청결/투명)
+    ----------------------------------------------- */
+    :root{
+      --deep-navy:   #0F2232;
+      --navy-700:    #193347; /* hover 깊이 */
+      --safety-orange:#FF6A13;
+      --slate-blue:  #3B5360;
+      --helmet-white:#F7F8FA;
+      --ink:         #0B1117;
+      --muted:       #6B7D87;
+      --border:      #E2E8F0;
+      --radius-xl:   16px;
+      --shadow-lg:   0 22px 44px rgba(15, 34, 50, .16);
+      --shadow-md:   0 12px 24px rgba(15, 34, 50, .12);
+      --field-h:     48px;
+    }
+
+    *{ box-sizing: border-box }
+    html, body{ height:100% }
+    body{
+      margin:0; font-family: "Pretendard Variable", Pretendard, -apple-system, system-ui, Segoe UI, Roboto, "Noto Sans KR", Helvetica, Arial, sans-serif;
+      background: var(--helmet-white);
+      color: var(--ink);
+    }
+    a{ color: var(--slate-blue); text-decoration: none }
+    a:hover{ text-decoration: underline }
+
+    /* -----------------------------------------------
+      Layout
+    ----------------------------------------------- */
+    .wrap{ min-height:100vh; display:grid; grid-template-columns:1.15fr 1fr }
+
+    .brand-pane{
+      position:relative; overflow:hidden; color:#fff; display:flex; align-items:center; justify-content:center; padding:64px;
+      background: linear-gradient(140deg, var(--deep-navy) 0%, #1a3550 40%, var(--slate-blue) 100%);
+    }
+    /* steel grid pattern */
+    .brand-pane::before{
+      content:""; position:absolute; inset:0; opacity:.14;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' fill='%230F2232'/%3E%3Cpath d='M0 22h44M22 0v44' stroke='%23FFFFFF' stroke-opacity='.35'/%3E%3C/svg%3E");
+      background-size:44px 44px; background-repeat:repeat;
+    }
+    /* subtle safety chevron */
+    .brand-pane::after{
+      content:""; position:absolute; inset:0; opacity:.10;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='90' viewBox='0 0 160 90'%3E%3Crect width='160' height='90' fill='none'/%3E%3Cpath d='M-10 70l30-40 30 40 30-40 30 40 30-40' fill='none' stroke='%23FF6A13' stroke-width='10' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size:200px 100px; background-repeat:repeat;
+    }
+    .brand-card{ position:relative; z-index:1; max-width:560px; width:100%; background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.22); backdrop-filter: blur(6px); border-radius: var(--radius-xl); box-shadow: var(--shadow-md); padding:32px 28px }
+    .brand-title{ font-size:22px; font-weight:800; letter-spacing:.2px; margin:0 0 8px }
+    .brand-copy{ opacity:.95; line-height:1.6 }
+
+    .panel{ display:grid; place-items:center; padding:40px 24px }
+    .card{ width:100%; max-width:440px; background:#fff; border-radius:var(--radius-xl); border:1px solid var(--border); box-shadow: var(--shadow-lg); padding:28px; position:relative }
+
+    /* brand logo zone */
+    .brand-logo-box{ display:flex; align-items:center; gap:12px; margin-bottom:12px }
+    .logo-wrap{ width:44px; height:44px; border-radius:10px; border:1px dashed var(--border); display:grid; place-items:center; overflow:hidden; background: var(--helmet-white) }
+    .logo-wrap img{ width:100%; height:100%; object-fit:contain }
+    .appname{ font-size:18px; font-weight:800; color: var(--deep-navy) }
+
+    .h1{ font-size:24px; margin:10px 0 6px }
+    .subtitle{ color: var(--muted); margin:0 0 18px }
+
+    .field{ margin-bottom:12px }
+    .label{ font-size:13px; color: var(--slate-blue); margin-bottom:6px; display:block }
+    .input{ width:100%; height:var(--field-h); padding:0 14px; border-radius:12px; border:1px solid var(--border); outline:none; transition: box-shadow .2s, border-color .2s }
+    .input:focus{ border-color: var(--slate-blue); box-shadow: 0 0 0 4px rgba(59,83,96,.18) }
+
+    .actions{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin:6px 0 0 }
+    .remember{ display:flex; align-items:center; gap:8px; font-size:13px; color: var(--slate-blue) }
+
+    .btn{ display:inline-flex; align-items:center; justify-content:center; height:48px; padding:0 16px; border-radius:12px; border:0; cursor:pointer; font-weight:800; letter-spacing:.2px; transition: transform .05s ease, box-shadow .2s ease }
+    .btn:active{ transform: translateY(1px) }
+    .btn-primary{ background: linear-gradient(180deg, var(--deep-navy), var(--navy-700)); color:#fff; box-shadow: 0 10px 22px rgba(15,34,50,.28) }
+    .btn-primary:hover{ box-shadow: 0 12px 28px rgba(15,34,50,.36) }
+    .btn-accent{ background: linear-gradient(180deg, #ff7f3c, var(--safety-orange)); color:#fff; box-shadow: 0 10px 22px rgba(255,106,19,.28) }
+    .btn-ghost{ background:#fff; color: var(--slate-blue); border:1px solid var(--border) }
+
+    .divider{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; color:#8a9aa4; margin:18px 0; font-size:13px }
+    .divider::before, .divider::after{ content:""; height:1px; background: var(--border) }
+
+    .foot{ margin-top:14px; display:flex; align-items:center; justify-content:space-between; font-size:14px }
+
+    /* color chips for spec */
+    .chips{ display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-top:22px }
+    .chip{ border:1px solid var(--border); border-radius:10px; overflow:hidden; background:#fff }
+    .chip .sw{ height:54px }
+    .chip .meta{ padding:8px 10px 10px; font-size:12px; color:var(--slate-blue); display:flex; align-items:center; justify-content:space-between }
+    .chip code{ font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; background:var(--helmet-white); padding:2px 6px; border-radius:6px; border:1px solid var(--border) }
+
+    /* responsive */
+    @media (max-width: 980px){ .wrap{ grid-template-columns:1fr } .brand-pane{ order:2; padding:40px } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <!-- Left: Brand Narrative -->
+    <section class="brand-pane" aria-label="브랜드 소개">
+      <div class="brand-card">
+        <h3 class="brand-title">포스코이앤씨 · 포스체크고 (POSCHECKO)</h3>
+        <p class="brand-copy">
+          하자 사진과 내용을 기반으로 <b>공종/세부공종/유형</b>을 자동 분류하는 멀티모달 AI.
+          Deep Navy는 신뢰와 전문성을, Safety Orange는 즉각 처리되는 CTA를, Slate Blue-Gray는
+          중립 상태의 균형을, Helmet White는 투명한 진행 과정을 상징합니다.
+        </p>
+      </div>
+    </section>
+
+    <!-- Right: Login Card -->
+    <section class="panel" aria-label="로그인">
+      <div class="card" role="form" aria-labelledby="loginTitle">
+        <div class="brand-logo-box">
+          <div class="logo-wrap"><img id="brandLogo" alt="앱 로고" src="" /></div>
+          <div class="appname">포스체크고 · POSCHECKO</div>
+        </div>
+        <label for="logoInput" class="btn btn-ghost" style="height:36px;padding:0 10px;font-size:12px;margin-bottom:8px">로고 업로드</label>
+        <input id="logoInput" type="file" accept="image/*" style="display:none" />
+
+        <h1 id="loginTitle" class="h1">로그인</h1>
+        <p class="subtitle">사번 또는 이메일로 로그인해 주세요</p>
+
+        <div class="field">
+          <label class="label" for="email">이메일 / 사번</label>
+          <input class="input" id="email" type="text" placeholder="posco@poscoenc.com" />
+        </div>
+        <div class="field">
+          <label class="label" for="password">비밀번호</label>
+          <input class="input" id="password" type="password" placeholder="••••••••" />
+        </div>
+
+        <div class="actions">
+          <label class="remember"><input type="checkbox" aria-label="로그인 상태 유지"/> 로그인 상태 유지</label>
+          <a href="#">비밀번호 찾기</a>
+        </div>
+
+        <div style="margin-top:16px; display:flex; gap:12px;">
+          <button class="btn btn-primary" style="flex:1">로그인</button>
+          <button class="btn btn-accent" style="width:48px" title="QR 로그인">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4 4h6v2H6v4H4V4Zm14 0h-6v2h4v4h2V4ZM4 20h6v-2H6v-4H4v6Zm10-2h6v-6h-2v4h-4v2Zm-5-7h2v2H9v-2Zm4 0h2v2h-2v-2Z" fill="currentColor"/></svg>
+          </button>
+        </div>
+
+        <div class="divider">또는</div>
+        <button class="btn btn-ghost" style="width:100%;height:44px">포스코 SSO로 계속</button>
+
+        <!-- Spec: Color Chips (for handoff) -->
+        <div class="chips" aria-label="컬러 가이드">
+          <div class="chip"><div class="sw" style="background:var(--deep-navy)"></div><div class="meta">Deep Navy <code>#0F2232</code></div></div>
+          <div class="chip"><div class="sw" style="background:var(--safety-orange)"></div><div class="meta">Safety Orange <code>#FF6A13</code></div></div>
+          <div class="chip"><div class="sw" style="background:var(--slate-blue)"></div><div class="meta">Slate Blue-Gray <code>#3B5360</code></div></div>
+          <div class="chip"><div class="sw" style="background:var(--helmet-white);border-top:1px solid var(--border)"></div><div class="meta">Helmet White <code>#F7F8FA</code></div></div>
+        </div>
+
+        <div class="foot">
+          <span style="color:#7C8D98">처음이신가요?</span>
+          <a href="#">계정 만들기</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // 간단한 로고 업로더: 선택 시 미리보기 표시
+    const fileInput = document.getElementById('logoInput');
+    const logoImg = document.getElementById('brandLogo');
+    fileInput?.addEventListener('change', (e) => {
+      const f = e.target.files?.[0];
+      if(!f) return;
+      const reader = new FileReader();
+      reader.onload = () => { logoImg.src = reader.result; };
+      reader.readAsDataURL(f);
+    });
+  </script>
+</body>
+</html>

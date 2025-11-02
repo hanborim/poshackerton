@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)http://127.0.0.1:5500/gpt3.html -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PANTONE Color Guide – POSCO E&amp;C 하자관리</title>
+  <style>
+    :root{
+      --color-primary:   #0F2232;   /* Deep Navy */
+      --color-secondary: #FF6A13;   /* Safety Orange */
+      --color-tertiary:  #3B5360;   /* Slate Blue-Gray */
+      --color-white:     #F7F8FA;   /* Helmet White */
+      --color-border:    #C8CDD3;
+      --text-strong:     #0F2232;
+      --text-muted:      #66707A;
+      --text-inverse:    #FFFFFF;
+      --radius-md:       12px;
+      --shadow-1:        0 4px 12px rgba(0,0,0,0.08);
+      --font-sans:       "Pretendard","Noto Sans KR",sans-serif;
+    }
+
+    body {
+      background: #fafafa;
+      font-family: var(--font-sans);
+      color: var(--text-strong);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    p { color: var(--text-muted); }
+
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      width: 90%;
+      max-width: 960px;
+    }
+
+    .pantone-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-1);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+    .pantone-card:hover { transform: translateY(-4px); }
+
+    .pantone-swatch {
+      height: 150px;
+    }
+
+    .pantone-meta {
+      padding: 16px;
+    }
+
+    .pantone-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .pantone-hex {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>POSCO E&amp;C – 하자관리 팬톤 컬러 가이드</h1>
+  <p>현장의 신뢰와 안전성을 시각화한 브랜드 컬러 팔레트입니다.</p>
+
+  <div class="palette">
+    <div class="pantone-card">
+      <div class="pantone-swatch" style="background:#0F2232;"></div>
+      <div class="pantone-meta">
+        <div class="pantone-name">Deep Navy</div>
+        <div class="pantone-hex">#0F2232</div>
+      </div>
+    </div>
+
+    <div class="pantone-card">
+      <div class="pantone-swatch" style="background:#FF6A13;"></div>
+      <div class="pantone-meta">
+        <div class="pantone-name">Safety Orange</div>
+        <div class="pantone-hex">#FF6A13</div>
+      </div>
+    </div>
+
+    <div class="pantone-card">
+      <div class="pantone-swatch" style="background:#3B5360;"></div>
+      <div class="pantone-meta">
+        <div class="pantone-name">Slate Blue-Gray</div>
+        <div class="pantone-hex">#3B5360</div>
+      </div>
+    </div>
+
+    <div class="pantone-card">
+      <div class="pantone-swatch" style="background:#F7F8FA; border: 1px solid #C8CDD3;"></div>
+      <div class="pantone-meta">
+        <div class="pantone-name">Helmet White</div>
+        <div class="pantone-hex">#F7F8FA</div>
+      </div>
+    </div>
+  </div>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</body></html>

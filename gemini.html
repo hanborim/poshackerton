@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포스코이앤씨 하자 접수 - Eco Trust</title>
+    <style>
+        /* --- 1. 변수 정의 및 기본 스타일 --- */
+        :root {
+            --color-primary: #007A33; /* 에코 그린 */
+            --color-secondary: #1A9FE2; /* 스카이 블루 */
+            --color-accent-bg: #F7F3E8; /* 내추럴 베이지 */
+            --color-text-dark: #333333;
+            --color-text-light: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #FFFFFF;
+            color: var(--color-text-dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 420px; /* 모바일 앱 환경 가정 */
+            margin: 0 auto;
+            min-height: 100vh;
+            background-color: #FFFFFF;
+        }
+        
+        /* --- 2. 패턴 배경 (Eco Flow) 스타일링 --- */
+        .header-section {
+            padding: 40px 20px 60px;
+            color: var(--color-text-light);
+            /* 패턴 구현: 옅은 그린/블루 그라데이션을 배경에 적용하여 '흐름' 표현 */
+            background: 
+                linear-gradient(145deg, rgba(0, 122, 51, 0.85), rgba(0, 122, 51, 1));
+            border-bottom-left-radius: 40px; /* 부드러운 곡선으로 'Flow' 강조 */
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 패턴 시각적 요소: 추상적인 물결/흐름 */
+        .header-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 120%;
+            height: 80%;
+            background: 
+                radial-gradient(ellipse at bottom right, rgba(26, 159, 226, 0.2) 0%, transparent 70%);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .main-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .sub-text {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* --- 3. 핵심 콘텐츠 및 AI 강조 섹션 --- */
+        .content-section {
+            padding: 20px;
+            margin-top: -30px; /* 헤더 패턴 아래로 살짝 올라오게 배치 */
+            position: relative;
+        }
+
+        .ai-benefit-card {
+            background-color: var(--color-accent-bg); /* 내추럴 베이지 */
+            border: 1px solid rgba(26, 159, 226, 0.3); /* 옅은 블루 테두리 */
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* 신뢰감 있는 그림자 */
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .ai-benefit-card h3 {
+            color: var(--color-secondary); /* 스카이 블루로 기술력 강조 */
+            margin-top: 0;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-benefit-card p {
+            color: #555555;
+            font-size: 0.9em;
+            margin-bottom: 0;
+        }
+
+        /* --- 4. CTA 버튼 스타일: 행동 유도 (신뢰) --- */
+        .btn-primary {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            text-align: center;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #005F28;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header-section">
+        <h1 class="main-title">우리 집 하자 접수, AI가 정확하게</h1>
+        <p class="sub-text">포스코이앤씨의 **친환경(Eco) 및 신뢰(Trust)** 기반 하자 접수 시스템입니다. </p>
+        <p class="sub-text">하자 공종/유형 자동 분류로 **빠르고 투명한** 처리를 약속드립니다.</p>
+    </header>
+
+    <main class="content-section">
+        
+        <div class="ai-benefit-card">
+            <h3>
+                💡 AI 자동 분류 시스템
+            </h3>
+            <p>사진과 내용을 바탕으로 하자 유형을 AI가 미리 분류하여,<br>**신속하고 정확한** AS 처리를 시작합니다.</p>
+        </div>
+
+        <p style="text-align: center; margin-bottom: 20px; font-weight: 500;">
+            접수 전, AI의 정확도를 높일 수 있도록<br>
+            **하자 이미지 촬영 가이드**를 꼭 확인해주세요.
+        </p>
+
+        <a href="#" class="btn-primary">
+            하자 접수 시작하기
+        </a>
+
+        <a href="#" style="display: block; text-align: center; margin-top: 20px; color: #555;">
+            나의 접수 내역 확인
+        </a>
+    </main>
+</div>
+
+</body>
+</html>
