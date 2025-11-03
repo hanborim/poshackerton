@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>포스체크고 · 하자 접수 결과 & 데이터 대시보드 & CS 관제</title>
+  <style>
+    :root{
+      --deep-navy:#0F2232; --navy-700:#193347; --safety-orange:#FF6A13; --slate-blue:#3B5360; --helmet-white:#F7F8FA; --border:#E2E8F0; --muted:#6B7D87;
+      --radius-xl:16px; --radius-lg:12px; --shadow-lg:0 22px 44px rgba(15,34,50,.16);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:"Pretendard Variable",Pretendard,-apple-system,system-ui,Segoe UI,Roboto,"Noto Sans KR",Helvetica,Arial,sans-serif;background:var(--helmet-white);color:var(--deep-navy)}
+
+    header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:10}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:900}
+    .tabs{display:flex;gap:8px}
+    .tab{height:38px;padding:0 14px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--slate-blue);font-weight:800;cursor:pointer}
+    .tab.active{background:var(--deep-navy);color:#fff;border-color:transparent}
+
+    main{padding:24px;display:grid;gap:18px}
+    .grid{display:grid;gap:16px}
+
+    /* RESULT PAGE */
+    .media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+    .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);padding:16px}
+    .media-card img,.media-card video{width:100%;border-radius:12px;object-fit:cover;max-height:200px}
+    .chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);color:var(--slate-blue);padding:6px 12px;border-radius:999px;font-weight:600;margin:4px}
+    .chip.cta{background:var(--safety-orange);color:#fff;border:none}
+
+    .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+    .kpi{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px}
+    .kpi label{display:block;font-size:12px;color:var(--muted)}
+    .kpi b{font-size:22px}
+
+    /* DASHBOARD */
+    .dash{display:grid;gap:16px}
+    .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .input{height:42px;border:1px solid var(--border);border-radius:10px;padding:0 12px}
+    .btn{height:42px;padding:0 14px;border-radius:10px;border:0;background:linear-gradient(180deg,var(--deep-navy),var(--navy-700));color:#fff;font-weight:800;cursor:pointer}
+    .btn.secondary{background:#fff;color:var(--slate-blue);border:1px solid var(--border)}
+    .area{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+    .bar{height:10px;border-radius:8px;background:var(--safety-orange)}
+    .bar.alt{background:var(--slate-blue)}
+
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px 8px;border-bottom:1px solid var(--border);font-size:13px}
+    th{color:var(--slate-blue);text-align:left}
+    tr:hover{background:#fafbfc}
+
+    .hidden{display:none}
+
+    /* CS 관제 전용 */
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:800;font-size:12px}
+    .badge.ok{background:#14b8a6;color:#fff}
+    .badge.warn{background:var(--safety-orange);color:#fff}
+    .cs-note{font-size:13px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">포스체크고 · POSCHECKO</div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="result">자동분류 결과</button>
+      <button class="tab" data-tab="dashboard">데이터 대시보드</button>
+      <button class="tab" data-tab="cs">CS 관제/처리</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- RESULT VIEW -->
+    <section id="result" class="grid">
+      <div class="kpis">
+        <div class="kpi"><label>접수 번호</label><b>#A2025-1103-0021</b></div>
+        <div class="kpi"><label>접수 일시</label><b>2025.11.03 19:42</b></div>
+        <div class="kpi"><label>AI 분류 상태</label><b style="color:var(--safety-orange)">완료</b></div>
+        <div class="kpi"><label>예상 처리 부서</label><b>건축 · 내장</b></div>
+      </div>
+
+      <div class="card"><h3 style="margin:0 0 8px;color:var(--slate-blue)">업로드된 이미지/영상 (4)</h3>
+        <div class="media-grid">
+          <div class="card media-card">
+            <img src="https://placehold.co/400x240" alt="미디어1">
+            <div style="margin-top:6px">
+              <span class="chip">#누수</span>
+              <span class="chip cta">#긴급조치필요</span>
+            </div>
+          </div>
+          <div class="card media-card">
+            <img src="https://placehold.co/400x240?text=이미지2" alt="미디어2">
+            <div style="margin-top:6px">
+              <span class="chip">#도색불량</span><span class="chip">#미세균열</span>
+            </div>
+          </div>
+          <div class="card media-card">
+            <video controls src="https://www.w3schools.com/html/mov_bbb.mp4"></video>
+            <div style="margin-top:6px">
+              <span class="chip">#소음감지</span><span class="chip cta">#전문점검필요</span>
+            </div>
+          </div>
+          <div class="card media-card">
+            <img src="https://placehold.co/400x240?text=이미지3" alt="미디어3">
+            <div style="margin-top:6px">
+              <span class="chip">#타일깨짐</span><span class="chip">#줄눈불량</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD VIEW -->
+    <section id="dashboard" class="dash hidden">
+      <div class="controls card">
+        <input id="search" class="input" placeholder="검색: 현장명/위치/하자내용…" />
+        <input id="file" type="file" accept=".csv,.tsv,.txt" class="input" style="padding:8px" />
+        <button id="loadDemo" class="btn secondary">샘플 불러오기</button>
+        <button id="clear" class="btn secondary">초기화</button>
+      </div>
+
+      <div class="area">
+        <div class="card">
+          <h3 style="margin:0 0 8px;color:var(--slate-blue)">요약 KPI</h3>
+          <div class="kpis" id="kpis"></div>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 8px;color:var(--slate-blue)">진행상태 분포</h3>
+          <div id="statusBars"></div>
+        </div>
+      </div>
+
+      <div class="area">
+        <div class="card">
+          <h3 style="margin:0 0 8px;color:var(--slate-blue)">하자대공종 TOP</h3>
+          <div id="majorBars"></div>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 8px;color:var(--slate-blue)">하자유형 TOP</h3>
+          <div id="typeBars"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 8px 8px;color:var(--slate-blue)">원시 데이터</h3>
+        <div style="overflow:auto">
+          <table id="table"></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CS 관제/처리 VIEW (AI가 이미 처리 가이드 제공) -->
+    <section id="cs" class="dash hidden">
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div>
+          <div class="badge ok">AI 자동 분류·담당 배정 완료</div>
+          <div class="cs-note">고객 업로드 자료를 기반으로 공종/유형/원인까지 자동 분석했습니다. 신뢰도 90% 이상 항목은 <b>수동 검토 필요 없음</b>으로 표기됩니다.</div>
+        </div>
+        <div>
+          <button id="approveAll" class="btn" title="검토 없이 일괄확정">AI 결과 일괄 확정</button>
+          <button id="exportCSV" class="btn secondary" title="CSV로 저장">CSV 내보내기</button>
+        </div>
+      </div>
+
+      <div class="controls card">
+        <input id="csSearch" class="input" placeholder="검색: 현장명/위치/내용…" />
+        <select id="csStatus" class="input">
+          <option value="">진행상태 전체</option>
+          <option>최종완료</option>
+          <option>처리중</option>
+          <option>대기</option>
+        </select>
+        <select id="csMajor" class="input">
+          <option value="">하자대공종 전체</option>
+          <option>건축</option>
+          <option>기계</option>
+          <option>전기</option>
+        </select>
+        <select id="csConf" class="input">
+          <option value="">신뢰도 전체</option>
+          <option value="90+">90% 이상</option>
+          <option value="70-89">70~89%</option>
+          <option value="<70">70% 미만</option>
+        </select>
+      </div>
+
+      <div class="card" style="overflow:auto">
+        <table id="csTable"></table>
+      </div>
+
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div>
+          <span class="badge ok">고신뢰 결과</span>
+          <span class="badge warn">검토 권장</span>
+        </div>
+        <div>
+          <button id="bulkDone" class="btn" style="background:linear-gradient(180deg,#24a148,#198754)">선택건 최종완료</button>
+          <button id="bulkAssign" class="btn">선택건 담당 배정</button>
+          <input id="assignee" class="input" placeholder="처리업체/담당자" style="width:220px" />
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // TAB SWITCH
+    (function(){
+      var tabBtns = document.querySelectorAll('.tab');
+      for(var i=0;i<tabBtns.length;i++){
+        tabBtns[i].addEventListener('click', function(){
+          for(var j=0;j<tabBtns.length;j++){ tabBtns[j].classList.remove('active'); }
+          this.classList.add('active');
+          var tab = this.getAttribute('data-tab');
+          document.getElementById('result').classList.toggle('hidden', tab !== 'result');
+          document.getElementById('dashboard').classList.toggle('hidden', tab !== 'dashboard');
+          document.getElementById('cs').classList.toggle('hidden', tab !== 'cs');
+        });
+      }
+    })();
+
+    // --- DASHBOARD LOGIC ---
+    var tableEl = document.getElementById('table');
+    var kpisEl = document.getElementById('kpis');
+    var majorBars = document.getElementById('majorBars');
+    var typeBars = document.getElementById('typeBars');
+    var statusBars = document.getElementById('statusBars');
+    var searchEl = document.getElementById('search');
+
+    function parseTSV(text){
+      if(!text) return [];
+      var normalized = String(text).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+      var lines = normalized.trim().split(/\n/);
+      if(lines.length === 0) return [];
+      var headers = lines[0].split(/\t|,/);
+      var out = [];
+      for(var i=1;i<lines.length;i++){
+        if(!lines[i]) continue;
+        var cols = lines[i].split(/\t|,/);
+        var obj = {};
+        for(var h=0; h<headers.length; h++){
+          var key = (headers[h]||'').trim();
+          obj[key] = (cols[h]||'').trim();
+        }
+        out.push(obj);
+      }
+      return out;
+    }
+
+    // --- Small tests ---
+    (function runParseTests(){
+      var t1 = 'A\tB\n1\t2';
+      var r1 = parseTSV(t1);
+      console.assert(r1.length===1 && r1[0].A==='1' && r1[0].B==='2','Test1 failed');
+      var t2 = 'A\tB\r\n3\t4';
+      var r2 = parseTSV(t2);
+      console.assert(r2.length===1 && r2[0].A==='3' && r2[0].B==='4','Test2 failed');
+      var t3 = 'A,B\nX,Y';
+      var r3 = parseTSV(t3);
+      console.assert(r3.length===1 && r3[0].A==='X' && r3[0].B==='Y','Test3 failed');
+    })();
+
+    var demoRows = [
+      '현장코드\t현장명\t최초접수일\t접수일\t하자접수단계\t접수방법\t진행상태\t위치\t위치분류\t하자대공종\t하자접수ID\t하자중공종\t하자공종\t하자유형\t하자원인\t하자내용\t시공업체\t처리업체',
+      '16918131\tB90467\t대구 침산동 주상복합 건립사업 도급계약\t20240827\t20240827\tBS공종점검\t사전점검\t최종완료\t거실\t세대\t건축\t유리\t창호유리\t파손\t자재\t거실 외창 하부 픽스창좌상부 모서리 금감\t케이와이글라스텍(주)\t케이와이글라스텍(주)',
+      '16923372\tB90467\t대구 침산동 주상복합 건립사업 도급계약\t20240830\t20240830\tBS공종점검\t사전점검\t최종완료\t거실\t세대\t건축\t내장\t석고보드\t면불량\t오시공\tpl창 하부 석고보드 면불량\t우림아이앤씨(주)\t우림아이앤씨(주)',
+      '16923373\tB90467\t대구 침산동 주상복합 건립사업 도급계약\t20240830\t20240830\tBS공종점검\t사전점검\t최종완료\t복도(세대)\t세대\t건축\t골조\t골조\t틈새\t오시공\t거실 골조벽 날개면과 침실2 좌문틀 사이 과틈-사춤요함\t(주)지형건설\t(주)지형건설',
+      '16974875\tB90467\t대구 침산동 주상복합 건립사업 도급계약\t20240904\t20240904\tBS공종점검\t기타\t최종완료\t드레스룸\t세대\t건축\t미장\t미장\t면불량\t오시공\t문틀 우측 벽체 과틈\t포스코이앤씨\t포스코이앤씨',
+      '16981849\tB90467\t대구 침산동 주상복합 건립사업 도급계약\t20240905\t20240905\tBS공종점검\t기타\t최종완료\t복도(세대)\t세대\t건축\t내장\t몰딩\t고정불량\t오시공\t복도 현관앞 몰딩 고정불량\t우림아이앤씨(주)\t우림아이앤씨(주)'
+    ];
+    var demoTSV = demoRows.join('\n');
+
+    var rows = [];
+
+    function render(){
+      var q = (searchEl.value||'').trim();
+      var data = q? rows.filter(function(r){
+        var vals = Object.values(r);
+        for(var i=0;i<vals.length;i++){ if(String(vals[i]||'').indexOf(q)>-1) return true; }
+        return false;
+      }) : rows.slice();
+
+      var total = data.length;
+      var done = data.filter(function(r){return r['진행상태']==='최종완료';}).length;
+      var urgent = data.filter(function(r){
+        var t = r['하자유형']||''; return t.indexOf('파손')>-1 || t.indexOf('수직수평불량')>-1;
+      }).length;
+      var siteSet = {}; data.forEach(function(r){ siteSet[r['현장명']] = true; });
+      var uniqueSites = Object.keys(siteSet).length;
+      kpisEl.innerHTML = ''+
+        '<div class="kpi"><label>총 접수</label><b>'+total+'</b></div>'+
+        '<div class="kpi"><label>최종완료</label><b>'+done+'</b></div>'+
+        '<div class="kpi"><label>긴급 추정(파손·수평불량)</label><b>'+urgent+'</b></div>'+
+        '<div class="kpi"><label>현장 수</label><b>'+uniqueSites+'</b></div>';
+
+      function countBy(key){
+        var map = {}; for(var i=0;i<data.length;i++){ var v = data[i][key] || '미지정'; map[v] = (map[v]||0) + 1; }
+        var arr = []; for(var k in map){ arr.push([k,map[k]]); } arr.sort(function(a,b){return b[1]-a[1]}); return arr;
+      }
+      function bars(container, items){
+        var max = 1; for(var i=0;i<items.length;i++){ if(items[i][1]>max) max = items[i][1]; }
+        var html = '';
+        for(var j=0;j<Math.min(items.length,6);j++){
+          var it = items[j]; var width = Math.round(100*it[1]/max);
+          html += '<div style="display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:6px 0">'
+               +   '<div style="color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+it[0]+'</div>'
+               +   '<div class="bar '+(j%2?'alt':'')+'" style="width:'+width+'%;"></div>'
+               + '</div>';
+        }
+        container.innerHTML = html;
+      }
+      bars(majorBars, countBy('하자대공종'));
+      bars(typeBars, countBy('하자유형'));
+      bars(statusBars, countBy('진행상태'));
+
+      var heads = Object.keys(rows[0]||{});
+      var thead = '<thead><tr>'+heads.map(function(h){return '<th>'+h+'</th>';}).join('')+'</tr></thead>';
+      var tbody = '<tbody>' + data.map(function(r){
+        return '<tr>'+heads.map(function(h){return '<td>'+(r[h]||'')+'</td>';}).join('')+'</tr>';
+      }).join('') + '</tbody>';
+      tableEl.innerHTML = thead + tbody;
+
+      // CS 테이블도 함께 갱신
+      renderCSTable();
+    }
+
+    // 초기 데이터 로드
+    rows = parseTSV(demoTSV);
+    render();
+
+    document.getElementById('loadDemo').onclick = function(){ rows = parseTSV(demoTSV); render(); };
+    document.getElementById('clear').onclick = function(){ rows = []; render(); };
+    searchEl.oninput = function(){ render(); };
+    document.getElementById('file').addEventListener('change', function(e){
+      var f = e.target && e.target.files ? e.target.files[0] : null; if(!f) return;
+      var r = new FileReader(); r.onload = function(){ rows = parseTSV(String(r.result||'')); render(); }; r.readAsText(f, 'utf-8');
+    });
+
+    // ===== CS 관제 로직 =====
+    var csTable = document.getElementById('csTable');
+    var csSearch = document.getElementById('csSearch');
+    var csStatus = document.getElementById('csStatus');
+    var csMajor = document.getElementById('csMajor');
+    var csConf = document.getElementById('csConf');
+    var bulkDone = document.getElementById('bulkDone');
+    var bulkAssign = document.getElementById('bulkAssign');
+    var approveAll = document.getElementById('approveAll');
+    var exportCSV = document.getElementById('exportCSV');
+    var assignee = document.getElementById('assignee');
+
+    // 임시: 신뢰도 추정 로직 (간단 룰 기반)
+    function inferConfidence(row){
+      var t = row['하자유형']||''; var base = 85;
+      if(t.indexOf('파손')>-1) base = 93; else if(t.indexOf('틈새')>-1) base = 88; else if(t.indexOf('수직수평불량')>-1) base = 90;
+      return base;
+    }
+
+    function filteredRows(){
+      var q = (csSearch && csSearch.value || '').trim();
+      var st = csStatus && csStatus.value || '';
+      var mj = csMajor && csMajor.value || '';
+      var cf = csConf && csConf.value || '';
+      var list = rows.slice();
+      // 필터
+      var out = [];
+      for(var i=0;i<list.length;i++){
+        var r = list[i];
+        if(st && r['진행상태']!==st) continue;
+        if(mj && r['하자대공종']!==mj) continue;
+        if(q){
+          var vals = Object.values(r); var ok=false; for(var k=0;k<vals.length;k++){ if(String(vals[k]||'').indexOf(q)>-1){ ok=true; break; }}
+          if(!ok) continue;
+        }
+        var conf = inferConfidence(r);
+        if(cf==='90+' && conf<90) continue;
+        if(cf==='70-89' && !(conf>=70 && conf<=89)) continue;
+        if(cf==='<70' && conf>=70) continue;
+        r.__conf = conf; // 캐시
+        out.push(r);
+      }
+      return out;
+    }
+
+    function renderCSTable(){
+      if(!csTable) return;
+      var data = filteredRows();
+      var heads = ['선택','신뢰도','진행상태','현장명','위치','하자대공종','하자중공종','하자공종','하자유형','하자내용','처리업체'];
+      var thead = '<thead><tr>'+heads.map(function(h){return '<th>'+h+'</th>';}).join('')+'</tr></thead>';
+      var rowsHtml = '';
+      for(var i=0;i<data.length;i++){
+        var r = data[i];
+        var conf = r.__conf != null ? r.__conf : inferConfidence(r);
+        var badge = conf>=90 ? '<span class="badge ok">'+conf+'%</span>' : (conf>=70 ? '<span class="badge">'+conf+'%</span>' : '<span class="badge warn">'+conf+'%</span>');
+        rowsHtml += '<tr>'+
+          '<td><input type="checkbox" class="csSel" data-index="'+i+'"/></td>'+
+          '<td>'+ badge +'</td>'+
+          '<td>'+ renderStatusCell(r,i) +'</td>'+
+          '<td>'+ (r['현장명']||'') +'</td>'+
+          '<td>'+ (r['위치']||'') +'</td>'+
+          '<td>'+ (r['하자대공종']||'') +'</td>'+
+          '<td>'+ (r['하자중공종']||'') +'</td>'+
+          '<td>'+ (r['하자공종']||'') +'</td>'+
+          '<td>'+ (r['하자유형']||'') +'</td>'+
+          '<td style="min-width:280px">'+ (r['하자내용']||'') +'</td>'+
+          '<td>'+ renderAssigneeCell(r,i) +'</td>'+
+        '</tr>';
+      }
+      csTable.innerHTML = thead + '<tbody>'+rowsHtml+'</tbody>';
+
+      // 이벤트 바인딩
+      bindCSEvents();
+    }
+
+    function renderStatusCell(r, idx){
+      var options = ['대기','처리중','최종완료'];
+      var curr = r['진행상태']||'';
+      var html = '<select data-role="status" data-idx="'+ idx +'" class="input" style="height:32px">';
+      for(var i=0;i<options.length;i++){
+        var o = options[i]; html += '<option'+(o===curr?' selected':'')+'>'+o+'</option>';
+      }
+      html += '</select>';
+      return html;
+    }
+    function renderAssigneeCell(r, idx){
+      var val = r['처리업체']||'';
+      return '<input data-role="assignee" data-idx="'+ idx +'" class="input" style="height:32px;width:180px" value="'+val+'"/>';
+    }
+
+    function bindCSEvents(){
+      var sEls = csTable.querySelectorAll('select[data-role="status"]');
+      for(var i=0;i<sEls.length;i++){
+        sEls[i].addEventListener('change', function(){
+          var idx = Number(this.getAttribute('data-idx'));
+          var data = filteredRows();
+          var row = data[idx]; if(!row) return; row['진행상태'] = this.value; render();
+        });
+      }
+      var aEls = csTable.querySelectorAll('input[data-role="assignee"]');
+      for(var j=0;j<aEls.length;j++){
+        aEls[j].addEventListener('change', function(){
+          var idx = Number(this.getAttribute('data-idx'));
+          var data = filteredRows();
+          var row = data[idx]; if(!row) return; row['처리업체'] = this.value; render();
+        });
+      }
+    }
+
+    if(csSearch) csSearch.oninput = renderCSTable;
+    if(csStatus) csStatus.onchange = renderCSTable;
+    if(csMajor) csMajor.onchange = renderCSTable;
+    if(csConf) csConf.onchange = renderCSTable;
+
+    if(bulkDone) bulkDone.onclick = function(){
+      var cbs = csTable.querySelectorAll('.csSel:checked');
+      var data = filteredRows();
+      for(var i=0;i<cbs.length;i++){ var idx = Number(cbs[i].getAttribute('data-index')); if(data[idx]) data[idx]['진행상태'] = '최종완료'; }
+      render();
+    };
+    if(bulkAssign) bulkAssign.onclick = function(){
+      var who = (assignee && assignee.value||'').trim(); if(!who) return;
+      var cbs = csTable.querySelectorAll('.csSel:checked');
+      var data = filteredRows();
+      for(var i=0;i<cbs.length;i++){ var idx = Number(cbs[i].getAttribute('data-index')); if(data[idx]) data[idx]['처리업체'] = who; }
+      render();
+    };
+    if(approveAll) approveAll.onclick = function(){
+      // 90% 이상은 자동 최종완료 처리
+      var data = filteredRows();
+      for(var i=0;i<data.length;i++){ if(inferConfidence(data[i])>=90){ data[i]['진행상태']='최종완료'; } }
+      render();
+      alert('AI 고신뢰 건은 모두 최종완료로 확정했습니다.');
+    };
+    if(exportCSV) exportCSV.onclick = function(){
+      var data = filteredRows(); if(data.length===0){ alert('내보낼 데이터가 없습니다.'); return; }
+      var heads = Object.keys(data[0]); var lines = [heads.join(',')];
+      for(var i=0;i<data.length;i++){
+        var row = heads.map(function(h){ var cell = String(data[i][h]||''); if(cell.indexOf(',')>-1||cell.indexOf('"')>-1){ cell='"'+cell.replace(/"/g,'""')+'"'; } return cell; }).join(',');
+        lines.push(row);
+      }
+      var blob = new Blob([lines.join('\n')], {type:'text/csv;charset=utf-8;'});
+      var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'poschecko_cs.csv'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    };
+
+    // 최초 CS 테이블 렌더
+    renderCSTable();
+  </script>
+</body>
+</html>

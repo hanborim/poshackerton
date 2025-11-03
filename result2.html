@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>포스체크고 · 하자 접수 결과 (AI 자동분류)</title>
+  <style>
+    :root{
+      --deep-navy:#0F2232; --safety-orange:#FF6A13; --slate-blue:#3B5360; --helmet-white:#F7F8FA; --border:#E2E8F0; --muted:#6B7D87;
+      --radius-xl:16px; --shadow-lg:0 22px 44px rgba(15,34,50,.16);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:"Pretendard Variable",Pretendard,sans-serif;}
+    body{background:var(--helmet-white);color:var(--deep-navy);padding:40px;}
+
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    header h1{font-size:22px;font-weight:800;color:var(--deep-navy);}
+    .status-badge{background:var(--safety-orange);color:#fff;padding:6px 14px;border-radius:999px;font-weight:600;font-size:14px;}
+
+    .summary-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);padding:20px;margin-bottom:24px;box-shadow:var(--shadow-lg);}
+    .summary-card h2{font-size:18px;color:var(--slate-blue);margin-bottom:12px;}
+    .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+    .summary-item{background:var(--helmet-white);padding:14px;border-radius:12px;}
+    .summary-item label{display:block;font-size:13px;color:var(--muted);}
+    .summary-item span{font-weight:700;font-size:15px;}
+
+    .media-section{margin-bottom:30px;}
+    .media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+    .media-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);padding:10px;box-shadow:0 6px 12px rgba(0,0,0,.06);}
+    .media-card img,.media-card video{width:100%;border-radius:12px;object-fit:cover;max-height:200px;}
+    .media-meta{padding:8px;font-size:13px;color:var(--muted);}
+
+    .tags{display:flex;flex-wrap:wrap;gap:6px;padding:6px 8px 10px;}
+    .tag{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--border);color:var(--slate-blue);padding:4px 10px;border-radius:999px;font-weight:600;font-size:13px;}
+    .tag.cta{background:var(--safety-orange);color:#fff;border:none;}
+
+    .ai-confidence{margin-top:20px;background:#fff;padding:14px;border-radius:var(--radius-xl);border:1px solid var(--border);}
+    .ai-confidence h3{margin-bottom:8px;font-size:16px;color:var(--slate-blue);}
+    .bar-wrap{background:#e5e7eb;border-radius:8px;height:10px;width:100%;overflow:hidden;}
+    .bar{background:var(--safety-orange);height:10px;border-radius:8px;}
+
+    footer{margin-top:40px;text-align:right;}
+    .btn{background:linear-gradient(180deg,#ff7f3c,var(--safety-orange));color:#fff;border:none;padding:12px 20px;border-radius:12px;font-weight:700;cursor:pointer;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>하자 접수 결과</h1>
+    <span class="status-badge">AI 자동 분류 완료</span>
+  </header>
+
+  <section class="summary-card">
+    <h2>접수 요약</h2>
+    <div class="summary-grid">
+      <div class="summary-item"><label>접수 번호</label><span>#A2025-1103-0021</span></div>
+      <div class="summary-item"><label>접수 일시</label><span>2025.11.03 19:42</span></div>
+      <div class="summary-item"><label>단지명</label><span>포스코 스마트시티 2단지</span></div>
+      <div class="summary-item"><label>동/호수</label><span>104동 1203호</span></div>
+    </div>
+  </section>
+
+  <section class="media-section">
+    <h2 style="color:var(--slate-blue);margin-bottom:12px;">업로드된 이미지 및 영상</h2>
+    <div class="media-grid">
+      <div class="media-card">
+        <img src="https://placehold.co/400x240" alt="하자 이미지1">
+        <div class="tags">
+          <span class="tag">#누수</span>
+          <span class="tag cta">#긴급조치필요</span>
+        </div>
+        <div class="media-meta">이미지_1.jpg · 분석 완료</div>
+      </div>
+      <div class="media-card">
+        <img src="https://placehold.co/400x240?text=이미지2" alt="하자 이미지2">
+        <div class="tags">
+          <span class="tag">#도색불량</span>
+          <span class="tag">#미세균열</span>
+        </div>
+        <div class="media-meta">이미지_2.jpg · 분석 완료</div>
+      </div>
+      <div class="media-card">
+        <video controls>
+          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        </video>
+        <div class="tags">
+          <span class="tag">#소음감지</span>
+          <span class="tag cta">#전문점검필요</span>
+        </div>
+        <div class="media-meta">영상_1.mp4 · 분석 완료</div>
+      </div>
+      <div class="media-card">
+        <img src="https://placehold.co/400x240?text=이미지3" alt="하자 이미지3">
+        <div class="tags">
+          <span class="tag">#타일깨짐</span>
+          <span class="tag">#줄눈불량</span>
+        </div>
+        <div class="media-meta">이미지_3.jpg · 분석 완료</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ai-confidence">
+    <h3>전체 분류 신뢰도</h3>
+    <label style="font-size:14px;color:var(--muted);">누수 / 긴급조치필요</label>
+    <div class="bar-wrap"><div class="bar" style="width:92%"></div></div>
+    <label style="font-size:14px;color:var(--muted);">타일깨짐 / 도색불량</label>
+    <div class="bar-wrap"><div class="bar" style="width:78%;background:var(--slate-blue)"></div></div>
+  </section>
+
+  <footer>
+    <button class="btn" onclick="alert('AI 분류 결과가 접수팀으로 전달되었습니다.')">확인 및 접수 완료</button>
+  </footer>
+</body>
+</html>

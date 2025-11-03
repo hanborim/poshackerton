@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>포스체크고 · 하자 접수 결과 & 데이터 대시보드</title>
+  <style>
+    :root{
+      --deep-navy:#0F2232; --navy-700:#193347; --safety-orange:#FF6A13; --slate-blue:#3B5360; --helmet-white:#F7F8FA; --border:#E2E8F0; --muted:#6B7D87;
+      --radius-xl:16px; --radius-lg:12px; --shadow-lg:0 22px 44px rgba(15,34,50,.16);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:"Pretendard Variable",Pretendard,-apple-system,system-ui,Segoe UI,Roboto,"Noto Sans KR",Helvetica,Arial,sans-serif;background:var(--helmet-white);color:var(--deep-navy)}
+
+    header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:10}
+    .brand{display:flex;gap:10px;align-items:center;font-weight:900}
+    .tabs{display:flex;gap:8px}
+    .tab{height:38px;padding:0 14px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--slate-blue);font-weight:800;cursor:pointer}
+    .tab.active{background:var(--deep-navy);color:#fff;border-color:transparent}
+
+    main{padding:24px;display:grid;gap:18px}
+    .grid{display:grid;gap:16px}
+
+    /* RESULT PAGE */
+    .media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+    .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);padding:16px}
+    .media-card img,.media-card video{width:100%;border-radius:12px;object-fit:cover;max-height:200px}
+    .chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);color:var(--slate-blue);padding:6px 12px;border-radius:999px;font-weight:600;margin:4px}
+    .chip.cta{background:var(--safety-orange);color:#fff;border:none}
+
+    .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+    .kpi{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px}
+    .kpi label{display:block;font-size:12px;color:var(--muted)}
+    .kpi b{font-size:22px}
+
+    /* DASHBOARD */
+    .dash{display:grid;gap:16px}
+    .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .input{height:42px;border:1px solid var(--border);border-radius:10px;padding:0 12px}
+    .btn{height:42px;padding:0 14px;border-radius:10px;border:0;background:linear-gradient(180deg,var(--deep-navy),var(--navy-700));color:#fff;font-weight:800;cursor:pointer}
+    .btn.secondary{background:#fff;color:var(--slate-blue);border:1px solid var(--border)}
+    .area{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+    .bar{height:10px;border-radius:8px;background:var(--safety-orange)}
+    .bar.alt{background:var(--slate-blue)}
+
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px 8px;border-bottom:1px solid var(--border);font-size:13px}
+    th{color:var(--slate-blue);text-align:left}
+    tr:hover{background:#fafbfc}
+
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">포스체크고 · POSCHECKO</div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="result">자동분류 결과</button>
+      <button class="tab" data-tab="dashboard">데이터 대시보드</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- RESULT VIEW -->
+    <section id="result" class="grid">
+      <div class="kpis">
+        <div class="kpi"><label>접수 번호</label><b>#A2025-1103-0021</b></div>
+        <div class="kpi"><label>접수 일시</label><b>2025.11.03 19:42</b></div>
+        <div class="kpi"><label>AI 분류 상태</label><b style="color:var(--safety-orange)">완료</b></div>
+        <div class="kpi"><label>예상 처리 부서</label><b>건축 · 내장</b></div>
+      </div>
+
+      <div class="card"><h3 style="margin:0 0 8px;color:var(--slate-blue)">업로드된 이미지/영상 (4)</h3>
+        <div class="media-grid">
+          <div class="card media-card">
+            <img src="https://placehold.co/400x240" alt="미디어1">
+            <div style="margin-top:6px">
+              <span class="chip">#누수</span>
+              <span class="chip cta">#긴급조치필요</span>
+            </div>
+          </div>
+          <div class="card media-card">
+            <img src="https://placehold.co/400x240?text=이미지2" alt="미디어2">
+            <div style="margin-top:6px">
+              <span class="chip">#도색불량</span><span class="chip">#미세균열</span>
+            </div>
+          </div>
+          <div class="card media-card">
+            <video controls src="https://www.w3schools.com/html/mov_bbb.mp4"></video>
+            <div style="margin-top:6px">
+              <span class="chip">#소음감지</span><span class="chip cta">#전문점검필요</span>
+            </div>
+          </div>
+          <div class="card media-card">
+            <img src="https://placehold.co/400x240?text=이미지3" alt="미디어3">
+            <div style="margin-top:6px">
+              <span class="chip">#타일깨짐</span><span class="chip">#줄눈불량</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD VIEW -->
+    <section id="dashboard" class="dash hidden">
+      <div class="controls card">
+        <input id="search" class="input" placeholder="검색: 현장명/위치/하자내용…" />
+        <input id="file" type="file" accept=".csv,.tsv,.txt" class="input" style="padding:8px" />
+        <button id="loadDemo" class="btn secondary">샘플 불러오기</button>
+        <button id="clear" class="btn secondary">초기화</button>
+      </div>
+
+      <div class="area">
+        <div class="card">
+          <h3 style="margin:0 0 8px;color:var(--slate-blue)">요약 KPI</h3>
+          <div class="kpis" id="kpis"></div>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 8px;color:var(--slate-blue)">진행상태 분포</h3>
+          <div id="statusBars"></div>
+        </div>
+      </div>
+
+      <div class="area">
+        <div class="card">
+          <h3 style="margin:0 0 8px;color:var(--slate-blue)">하자대공종 TOP</h3>
+          <div id="majorBars"></div>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 8px;color:var(--slate-blue)">하자유형 TOP</h3>
+          <div id="typeBars"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 8px 8px;color:var(--slate-blue)">원시 데이터</h3>
+        <div style="overflow:auto">
+          <table id="table"></table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // TAB SWITCH
+    document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
+      document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.dataset.tab;
+      document.getElementById('result').classList.toggle('hidden', tab!=='result');
+      document.getElementById('dashboard').classList.toggle('hidden', tab!=='dashboard');
+    }));
+
+    // --- DASHBOARD LOGIC ---
+    const tableEl = document.getElementById('table');
+    const kpisEl = document.getElementById('kpis');
+    const majorBars = document.getElementById('majorBars');
+    const typeBars = document.getElementById('typeBars');
+    const statusBars = document.getElementById('statusBars');
+    const searchEl = document.getElementById('search');
+
+    // minimal TSV parser
+    function parseTSV(text){
+      const lines = text.trim().split(/
+?
+/);
+      const headers = lines[0].split(/	|,/) // support tsv or csv
+      return lines.slice(1).map(row=>{
+        const cols = row.split(/	|,/);
+        const obj = {}; headers.forEach((h,i)=> obj[h.trim()] = (cols[i]||'').trim());
+        return obj;
+      });
+    }
+
+    // Sample rows from your screenshot
+    const demoTSV = `현장코드	현장명	최초접수일	접수일	하자접수단계	접수방법	진행상태	위치	위치분류	하자대공종	하자접수ID	하자중공종	하자공종	하자유형	하자원인	하자내용	시공업체	처리업체
+`
+    + `16918131	B90467	대구 침산동 주상복합 건립사업 도급계약	20240827	20240827	BS공종점검	사전점검	최종완료	거실	세대	건축	유리	창호유리	파손	자재	거실 외창 하부 픽스창좌상부 모서리 금감	케이와이글라스텍(주)	케이와이글라스텍(주)
+`
+    + `16923372	B90467	대구 침산동 주상복합 건립사업 도급계약	20240830	20240830	BS공종점검	사전점검	최종완료	거실	세대	건축	내장	석고보드	면불량	오시공	pl창 하부 석고보드 면불량	우림아이앤씨(주)	우림아이앤씨(주)
+`
+    + `16923373	B90467	대구 침산동 주상복합 건립사업 도급계약	20240830	20240830	BS공종점검	사전점검	최종완료	복도(세대)	세대	건축	골조	골조	틈새	오시공	거실 골조벽 날개면과 침실2 좌문틀 사이 과틈-사춤요함	(주)지형건설	(주)지형건설
+`
+    + `16974875	B90467	대구 침산동 주상복합 건립사업 도급계약	20240904	20240904	BS공종점검	기타	최종완료	드레스룸	세대	건축	미장	미장	면불량	오시공	문틀 우측 벽체 과틈	포스코이앤씨	포스코이앤씨
+`
+    + `16981849	B90467	대구 침산동 주상복합 건립사업 도급계약	20240905	20240905	BS공종점검	기타	최종완료	복도(세대)	세대	건축	내장	몰딩	고정불량	오시공	복도 현관앞 몰딩 고정불량	우림아이앤씨(주)	우림아이앤씨(주)`;
+
+    let rows = [];
+
+    function render(){
+      // filter
+      const q = (searchEl.value||'').trim();
+      const data = q? rows.filter(r=> Object.values(r).some(v=> (v||'').includes(q))) : rows.slice();
+
+      // KPIs
+      const total = data.length;
+      const done = data.filter(r=>r['진행상태']==='최종완료').length;
+      const urgent = data.filter(r=> (r['하자유형']||'').includes('파손') || (r['하자유형']||'').includes('수직수평불량')).length;
+      const uniqueSites = new Set(data.map(r=>r['현장명'])).size;
+      kpisEl.innerHTML = `
+        <div class="kpi"><label>총 접수</label><b>${total}</b></div>
+        <div class="kpi"><label>최종완료</label><b>${done}</b></div>
+        <div class="kpi"><label>긴급 추정(파손·수평불량)</label><b>${urgent}</b></div>
+        <div class="kpi"><label>현장 수</label><b>${uniqueSites}</b></div>`;
+
+      // helper: compute counts
+      const countBy = (key) => {
+        const map = new Map();
+        data.forEach(r=>{ const v = r[key]||'미지정'; map.set(v,(map.get(v)||0)+1) });
+        return [...map.entries()].sort((a,b)=>b[1]-a[1]);
+      };
+
+      // bars
+      function bars(container, items, altEvery=2){
+        const max = Math.max(1, ...items.map(i=>i[1]));
+        container.innerHTML = items.slice(0,6).map((i,idx)=>{
+          const width = Math.round(100*i[1]/max);
+          return `<div style="display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:6px 0">
+            <div style="color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${i[0]}</div>
+            <div class="bar ${idx%2? 'alt':''}" style="width:${width}%;"></div>
+          </div>`;
+        }).join('');
+      }
+
+      bars(majorBars, countBy('하자대공종'));
+      bars(typeBars, countBy('하자유형'));
+      bars(statusBars, countBy('진행상태'));
+
+      // table
+      const heads = Object.keys(rows[0]||{});
+      tableEl.innerHTML = `
+        <thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+        <tbody>${data.map(r=>`<tr>${heads.map(h=>`<td>${r[h]||''}</td>`).join('')}</tr>`).join('')}</tbody>`;
+    }
+
+    // Load demo initially
+    rows = parseTSV(demoTSV);
+    render();
+
+    // Handlers
+    document.getElementById('loadDemo').onclick = ()=>{ rows = parseTSV(demoTSV); render(); };
+    document.getElementById('clear').onclick = ()=>{ rows = []; render(); };
+    searchEl.oninput = ()=> render();
+
+    // file upload
+    document.getElementById('file').addEventListener('change', (e)=>{
+      const f = e.target.files?.[0]; if(!f) return; const r = new FileReader();
+      r.onload = ()=>{ rows = parseTSV(String(r.result)); render(); };
+      r.readAsText(f, 'utf-8');
+    });
+  </script>
+</body>
+</html>
